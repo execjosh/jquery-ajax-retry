@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>TEST - jQuery Ajax Retry</title>
+	<style type="text/css">
+		table {border:none;}
+		th {text-align:right;}
+	</style>
+</head>
+<body>
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<th><label for="attempts">Attempts:</label></th>
+			<td><input type="text" id="attempts" value="" /></td>
+		</tr>
+		<tr>
+			<th><label for="cutoff">Cutoff:</label></th>
+			<td><input type="text" id="cutoff" value="" /></td>
+		</tr>
+		<tr>
+			<th><label for="slot_time">Slot Time:</label></th>
+			<td><input type="text" id="slot_time" value="" /></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="button" id="run" value="Run" /></td>
+		</tr>
+	</table>
+
+	<div id="page"></div>
+
+	<script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+	<script src="../src/jquery.ajaxretry.js"></script>
+	<script>
+		(function($) {
+			// Backoff tick callback
+			function on_tick(count) {
+				var minutes = Math.floor(count / 60),
+					seconds = count % 60,
+					display = seconds + '秒';
+
+				if (0 < minutes) {
+					display = [minutes, '分', display].join('');
+				}
+
+				$('#page').html('<div>' + display + '後にリトライします</div>');
+			}
+
+			// Error handler
+			function on_error() {
+				$('#page').html("<div>OnError</div>");
+			}
+
+			// Success handler
+			function on_success(data) {
+				$('#page').html("<div>OnSuccess<br />" + data + "</div>");
+			}
+
+			// Set-up
+			$(document).ready(function(){
+				var retry_defaults = $.ajaxWithRetry.retrySetup({
+					attempts: 30,
+					cutoff: 7,
+					slot_time: 100,
+				});
+
+				$('#attempts').val(retry_defaults.attempts);
+				$('#cutoff').val(retry_defaults.cutoff);
+				$('#slot_time').val(retry_defaults.slot_time);
+
+				$('#run').click(function(){
+					var retry_opts = {
+							attempts: $('#attempts').val(),	// Attempts after which to give up
+							cutoff: $('#cutoff').val(),	// Attempts after which to stop exponentiation
+							tick: on_tick,	// Tick callback
+							slot_time: $('#slot_time').val()	// Slot time (duration between ticks)
+						};
+					$.ajaxWithRetry({
+						url: 'this/file/does/not/exist',
+						retry: retry_opts,
+						error: on_error,
+						success: on_success,
+						async: true,
+						cache: false
+					});
+				});
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>
+
