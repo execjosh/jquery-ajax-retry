@@ -31,6 +31,7 @@
 			slot_time: DEF_SLOT_TIME,
 			tick: NOP_FUNC
 		},
+		original_ajax_func = $.ajax,
 		ajaxWithRetry = function(settings){
 			var failures = 0,
 				opts = $.extend(true, {}, DEF_OPTS, settings.retry || {}),
@@ -38,7 +39,7 @@
 
 			function retry_delay(time) {
 				if (0 > time) {
-					$.ajax(settings);
+					original_ajax_func(settings);
 				}
 				else {
 					// Send tick event to listener
@@ -68,7 +69,7 @@
 				}
 			};
 
-			return $.ajax(settings);
+			return original_ajax_func(settings);
 		};
 
 	ajaxWithRetry.retrySetup = function(opts){
