@@ -33,8 +33,14 @@
 		},
 		original_ajax_func = $.ajax,
 		ajaxWithRetry = function(settings){
+			settings = $.extend(true, {}, $.ajaxSettings, settings);
+
+			if (!settings.retry) {
+				return original_ajax_func(settings);
+			}
+
 			var failures = 0,
-				opts = $.extend(true, {}, DEF_OPTS, settings.retry || {}),
+				opts = settings.retry,
 				orig_err_func = settings.error || NOP_FUNC;
 
 			function retry_delay(time) {
