@@ -31,14 +31,14 @@
 			slot_time: DEF_SLOT_TIME,
 			tick: NOP_FUNC
 		},
-		ajaxWithRetry = function(req){
+		ajaxWithRetry = function(settings){
 			var failures = 0,
-				opts = $.extend(true, {}, DEF_OPTS, req.retry || {}),
-				orig_err_func = req.error || NOP_FUNC;
+				opts = $.extend(true, {}, DEF_OPTS, settings.retry || {}),
+				orig_err_func = settings.error || NOP_FUNC;
 
 			function retry_delay(time) {
 				if (0 > time) {
-					$.ajax(req);
+					$.ajax(settings);
 				}
 				else {
 					// Send tick event to listener
@@ -56,7 +56,7 @@
 			opts.delay_func = opts.delay_func || DEF_DELAY_FUNC;
 
 			// Override error function
-			req.error = function(xhr_obj, textStatus, errorThrown){
+			settings.error = function(xhr_obj, textStatus, errorThrown){
 				failures++;
 				if (failures >= opts.attempts) {
 					// Give up and call the original error function
@@ -68,7 +68,7 @@
 				}
 			};
 
-			return $.ajax(req);
+			return $.ajax(settings);
 		};
 
 	ajaxWithRetry.retrySetup = function(opts){
