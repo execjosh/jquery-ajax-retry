@@ -34,8 +34,9 @@
 	<script>
 		(function($) {
 			// Backoff tick callback
-			function on_tick(count) {
-				var minutes = Math.floor(count / 60),
+			function on_tick(backoff_info) {
+				var count = backoff_info.ticks,
+					minutes = Math.floor(count / 60),
 					seconds = count % 60,
 					display = seconds + '秒';
 
@@ -43,7 +44,14 @@
 					display = [minutes, '分', display].join('');
 				}
 
-				$('#page').html('<div>' + display + '後にリトライします</div>');
+				$('#page').html([
+					'<div>',
+						backoff_info.attempts, '回中',
+						backoff_info.failures, '回失敗していますが、',
+						display, '後にリトライします',
+						'（slot_time:', backoff_info.slot_time, '）',
+					'</div>'
+				].join(''));
 			}
 
 			// Error handler

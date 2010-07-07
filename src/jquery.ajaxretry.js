@@ -43,15 +43,24 @@
 				opts = settings.retry,
 				orig_err_func = settings.error || NOP_FUNC;
 
-			function retry_delay(time) {
-				if (0 > time) {
+			function retry_delay(ticks) {
+				if (0 > ticks) {
 					original_ajax_func(settings);
 				}
 				else {
 					// Send tick event to listener
-					window.setTimeout(function(){opts.tick(time)}, 0);
+					window.setTimeout(function(){
+						opts.tick({
+							attempts: opts.attempts,
+							cutoff: opts.cutoff,
+							failures: failures,
+							slot_time: opts.slot_time,
+							ticks: ticks
+						})
+					}, 0);
+
 					// Wait for slot_time
-					window.setTimeout(function(){retry_delay(time - 1)}, opts.slot_time);
+					window.setTimeout(function(){retry_delay(ticks - 1)}, opts.slot_time);
 				}
 			}
 
