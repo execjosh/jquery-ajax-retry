@@ -91,14 +91,16 @@
 			};
 
 			return xhr;
+		},
+		ajaxRetrySetup = function(opts){
+			DEF_OPTS = $.extend(true, DEF_OPTS, opts);
+			$.ajaxRetrySettings = DEF_OPTS;
+			return DEF_OPTS;
 		};
 
-	ajaxWithRetry.retrySetup = function(opts){
-		DEF_OPTS = $.extend(true, DEF_OPTS, opts || {});
-		return DEF_OPTS;
-	};
-
-	$['ajaxWithRetry'] = ajaxWithRetry;
+	$['ajaxRetrySettings'] = DEF_OPTS;
+	$['ajaxRetrySetup'] = ajaxRetrySetup,
+	$['ajax'] = ajaxWithRetry;
 })(jQuery);
 
 // vim: ts=4:sw=4:sts=4:noet:
