@@ -22,20 +22,20 @@
 	}
 
 	// Error handler
-	function on_error() {
-		$('#page').html("<div>OnError</div>");
+	function on_error(xhr, status, error) {
+		$('#page').html(['<div>OnError<br />', xhr.status, ', ', status, ', ', error, '</div>'].join(''));
 		enableGui(true);
 	}
 
 	// Success handler
-	function on_success(data) {
-		$('#page').html("<div>OnSuccess<br />" + data + "</div>");
+	function on_success(data, status, xhr) {
+		$('#page').html(['<div>OnSuccess<br />', xhr.status, ', ', status, ' -- ', data, '</div>'].join(''));
 		enableGui(true);
 	}
 
 	// Complete handler
 	function on_complete(xhr, status) {
-		console.log(['OnComplete -- "',status,'"'].join(''));
+		console.log(['OnComplete -- ', xhr.status, ', "', status, '"'].join(''));
 	}
 
 	var elmIds = [
