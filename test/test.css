@@ -1,0 +1,4 @@
+table {border:none;}
+th {text-align:right;}
+td {text-align:center;}
+#ajax, #ajax-vals, #ajaxRetrySetup {width:100%;}

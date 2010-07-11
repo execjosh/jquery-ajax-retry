@@ -23,28 +23,46 @@
 		DEF_DELAY_FUNC = function(i){
 			return Math.floor(Math.random() * ((2 << i) - 1));
 		},
+		DEF_ERROR_CODES = [502,503,504],
 		DEF_SLOT_TIME = 1000,
 		DEF_OPTS = {
 			attempts: DEF_ATTEMPTS,
 			cutoff: DEF_CUTOFF,
 			delay_func: DEF_DELAY_FUNC,
+			error_codes: DEF_ERROR_CODES,
 			slot_time: DEF_SLOT_TIME,
 			tick: NOP_FUNC
 		},
-		ajaxWithRetry = function(req){
-			var failures = 0,
-				opts = $.extend(true, {}, DEF_OPTS, req.retry || {}),
-				orig_err_func = req.error || NOP_FUNC;
+		original_ajax_func = $.ajax,
+		ajaxWithRetry = function(settings){
+			settings = $.extend(true, {}, $.ajaxSettings, settings);
 
-			function retry_delay(time) {
-				if (0 > time) {
-					$.ajax(req);
+			if (!settings.retry) {
+				return original_ajax_func(settings);
+			}
+
+			var failures = 0,
+				opts = $.extend(true, {}, $.ajaxRetrySettings, settings.retry),
+				orig_err_func = settings.error || NOP_FUNC;
+
+			function retry_delay(ticks) {
+				if (0 > ticks) {
+					original_ajax_func(settings);
 				}
 				else {
 					// Send tick event to listener
-					window.setTimeout(function(){opts.tick(time)}, 0);
+					window.setTimeout(function(){
+						opts.tick({
+							attempts: opts.attempts,
+							cutoff: opts.cutoff,
+							failures: failures,
+							slot_time: opts.slot_time,
+							ticks: ticks
+						})
+					}, 0);
+
 					// Wait for slot_time
-					window.setTimeout(function(){retry_delay(time - 1)}, opts.slot_time);
+					window.setTimeout(function(){retry_delay(ticks - 1)}, opts.slot_time);
 				}
 			}
 
@@ -56,9 +74,10 @@
 			opts.delay_func = opts.delay_func || DEF_DELAY_FUNC;
 
 			// Override error function
-			req.error = function(xhr_obj, textStatus, errorThrown){
+			settings.error = function(xhr_obj, textStatus, errorThrown){
+				var can_retry = 0 <= $.inArray(xhr_obj.status, opts.error_codes);
 				failures++;
-				if (failures >= opts.attempts) {
+				if (!can_retry || failures >= opts.attempts) {
 					// Give up and call the original error function
 					window.setTimeout(function(){orig_err_func(xhr_obj, textStatus, errorThrown)}, 0);
 				}
@@ -68,14 +87,24 @@
 				}
 			};
 
-			return $.ajax(req);
+			// Save the XHR object for reuse!
+			var xhr = original_ajax_func(settings);
+			settings.xhr = function(){
+				return xhr;
+			};
+
+			return xhr;
+		},
+		ajaxRetrySetup = function(opts){
+			DEF_OPTS = $.extend(true, DEF_OPTS, opts);
+			$.ajaxRetrySettings = DEF_OPTS;
+			return DEF_OPTS;
 		};
 
-	ajaxWithRetry.retrySetup = function(opts){
-		DEF_OPTS = $.extend(true, DEF_OPTS, opts || {});
-		return DEF_OPTS;
-	};
-
-	$['ajaxWithRetry'] = ajaxWithRetry;
+	$['ajaxRetrySettings'] = DEF_OPTS;
+	$['ajaxRetrySetup'] = ajaxRetrySetup,
+	$['ajax'] = ajaxWithRetry;
 })(jQuery);
+
+// vim: ts=4:sw=4:sts=4:noet:
 
