@@ -40,7 +40,7 @@
 			}
 
 			var failures = 0,
-				opts = settings.retry,
+				opts = $.extend(true, {}, $.ajaxRetrySettings, settings.retry),
 				orig_err_func = settings.error || NOP_FUNC;
 
 			function retry_delay(ticks) {
