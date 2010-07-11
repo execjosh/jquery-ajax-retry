@@ -23,11 +23,13 @@
 		DEF_DELAY_FUNC = function(i){
 			return Math.floor(Math.random() * ((2 << i) - 1));
 		},
+		DEF_ERROR_CODES = [502,503,504],
 		DEF_SLOT_TIME = 1000,
 		DEF_OPTS = {
 			attempts: DEF_ATTEMPTS,
 			cutoff: DEF_CUTOFF,
 			delay_func: DEF_DELAY_FUNC,
+			error_codes: DEF_ERROR_CODES,
 			slot_time: DEF_SLOT_TIME,
 			tick: NOP_FUNC
 		},
@@ -73,8 +75,9 @@
 
 			// Override error function
 			settings.error = function(xhr_obj, textStatus, errorThrown){
+				var can_retry = 0 <= $.inArray(xhr_obj.status, opts.error_codes);
 				failures++;
-				if (failures >= opts.attempts) {
+				if (!can_retry || failures >= opts.attempts) {
 					// Give up and call the original error function
 					window.setTimeout(function(){orig_err_func(xhr_obj, textStatus, errorThrown)}, 0);
 				}
