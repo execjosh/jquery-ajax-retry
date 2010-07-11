@@ -1,6 +1,5 @@
 <?php
-for ($i = 0; $i < 10000; $i++) {
-	;
-}
+$http_code = (isset($_GET['http_code'])) ? $_GET['http_code'] : '404 Not Found';
+header("HTTP/1.1 {$http_code}");
+print_r($_GET);
 ?>
-{"name":"value}
