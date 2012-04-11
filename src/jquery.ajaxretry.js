@@ -88,13 +88,7 @@
 				}
 			};
 
-			// Save the XHR object for reuse!
-			var xhr = original_ajax_func(settings);
-			settings.xhr = function(){
-				return xhr;
-			};
-
-			return xhr;
+			return original_ajax_func(settings);
 		},
 		ajaxRetrySetup = function(opts){
 			DEF_OPTS = $.extend(true, DEF_OPTS, opts);
