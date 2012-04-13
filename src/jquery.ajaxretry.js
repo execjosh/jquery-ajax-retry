@@ -5,6 +5,7 @@
  * repository: http://github.com/execjosh/jquery-ajax-retry
  *
  * @author execjosh
+ * @version 0.1.1 (dev)
  *
  * Copyright (c) 2010 execjosh, http://execjosh.blogspot.com
  * Licenced under the terms of the MIT License
