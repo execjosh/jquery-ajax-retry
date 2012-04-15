@@ -19,9 +19,12 @@
         <h2>Smart retry for jQuery's ajax.</h2>
 
         <section id="downloads">
-          <a href="https://github.com/execjosh/jquery-ajax-retry/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/execjosh/jquery-ajax-retry/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/execjosh/jquery-ajax-retry" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+          <a href="https://github.com/execjosh/jquery-ajax-retry/zipball/v0.1.0"
+          class="btn">Download v0.1.0 (.zip)</a>
+          <a href="https://github.com/execjosh/jquery-ajax-retry/tarball/v0.1.0"
+          class="btn">Download v0.1.0 (.tar.gz)</a>
+          <a href="https://github.com/execjosh/jquery-ajax-retry"
+          class="btn btn-github"><span class="icon"></span>View on GitHub</a>
         </section>
       </div>
     </header>
@@ -29,11 +32,20 @@
     <div class="container">
       <section id="main_content">
         <h3>About</h3>
+        <p>This project is a plugin for jQuery that augments <code>$.ajax</code>
+        by adding smart retry functionality.  Presently, it's retry strategy
+        employs <a
+        href="http://en.wikipedia.org/wiki/Exponential_backoff">exponential
+        backoff</a>, or more specifically <a
+        href="http://en.wikipedia.org/wiki/Truncated_binary_exponential_backoff">truncated
+        binary exponential backoff</a>, which can help alleviate server congestion.</p>
 
-<p>This project is a plugin for jQuery that augments <code>$.ajax</code> by adding smart retry functionality.  Presently, it's retry strategy employs <a href="http://en.wikipedia.org/wiki/Exponential_backoff">exponential backoff</a>, or more specifically <a href="http://en.wikipedia.org/wiki/Truncated_binary_exponential_backoff">truncated binary exponential backoff</a>, which can help alleviate server congestion.</p>
+        <h3>Supported jQuery Versions</h3>
+        <p>Currently it has been tested with only jQuery v1.4.x.  However, it
+        will soon be updated to be compatible for use with jQuery
+        &lt;=1.7.x.</p>
       </section>
     </div>
 
-    
   </body>
 </html>
