@@ -1,0 +1,36 @@
+{
+  "name": "jquery-ajax-retry",
+  "version": "0.1.0",
+  "description": "Smart retry functionality for jQuery.ajax",
+  "author": {
+    "name": "execjosh",
+    "url": "http://execjosh.blogspot.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/execjosh/jquery-ajax-retry.git"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "ajax",
+    "jquery",
+    "retry",
+    "backoff"
+  ],
+  "bugs": {
+    "url": "https://github.com/execjosh/jquery-ajax-retry/issues"
+  },
+  "homepage": "https://github.com/execjosh/jquery-ajax-retry#readme",
+  "licenses": {
+    "type": "MIT",
+    "url": "https://github.com/execjosh/jquery-ajax-retry/blob/master/MIT-LICENSE"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
