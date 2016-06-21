@@ -1,6 +1,6 @@
 {
   "name": "jquery-ajax-retry",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Smart retry functionality for jQuery.ajax",
   "author": {
     "name": "execjosh",
@@ -26,10 +26,8 @@
     "type": "MIT",
     "url": "https://github.com/execjosh/jquery-ajax-retry/blob/master/MIT-LICENSE"
   },
-  "dependencies": {
-  },
-  "devDependencies": {
-  },
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
